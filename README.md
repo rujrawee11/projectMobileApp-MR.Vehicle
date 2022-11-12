@@ -25,7 +25,7 @@ dropdown
 firebase
 - npm install firebase@9.6.11
 - ![image](https://user-images.githubusercontent.com/73680333/201475048-1421a61e-054f-44ac-89df-71563d595b1d.png)
- --------------------------config-----------------------
+- --------------------------config-----------------------
 const firebaseConfig = {
   apiKey: "AIzaSyAm109VLQogmsd_lU60Z-wjQlgiuISxfSU",
   authDomain: "fir-mobile-b0245.firebaseapp.com",
