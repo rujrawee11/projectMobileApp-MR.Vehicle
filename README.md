@@ -21,3 +21,17 @@ navigate
 
 dropdown
 -yarn add react-dropdown
+
+firebase
+- npm install firebase@9.6.11
+- ![image](https://user-images.githubusercontent.com/73680333/201475048-1421a61e-054f-44ac-89df-71563d595b1d.png)
+ --------------------------config-----------------------
+const firebaseConfig = {
+  apiKey: "AIzaSyAm109VLQogmsd_lU60Z-wjQlgiuISxfSU",
+  authDomain: "fir-mobile-b0245.firebaseapp.com",
+  projectId: "fir-mobile-b0245",
+  storageBucket: "fir-mobile-b0245.appspot.com",
+  messagingSenderId: "251539828458",
+  appId: "1:251539828458:web:9b7dc1bcf1b1608945f193"
+};
+
