@@ -8,6 +8,7 @@ react native paper
 
 datepicker
 - yarn add react-datepicker
+- npm i react-native-modal-datetime-picker @react-native-community/datetimepicker
 
 checkbox
 -yarn add @react-native-community/checkbox
