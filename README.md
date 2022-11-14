@@ -11,16 +11,16 @@ datepicker
 - npm i react-native-modal-datetime-picker @react-native-community/datetimepicker
 
 checkbox
--yarn add @react-native-community/checkbox
--npx pod-install
+- yarn add @react-native-community/checkbox
+- npx pod-install
 
 navigate
--expo install @react-navigation/native
--expo install react-native-screens react-native-safe-area-context
--expo install @react-navigation/native-stack
+- expo install @react-navigation/native
+- expo install react-native-screens react-native-safe-area-context
+- expo install @react-navigation/native-stack
 
 dropdown
--yarn add react-dropdown
+- yarn add react-dropdown
 - npm i react-native-dropdown-picker
 
 firebase
