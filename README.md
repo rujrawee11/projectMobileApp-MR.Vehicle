@@ -21,6 +21,7 @@ navigate
 
 dropdown
 -yarn add react-dropdown
+- npm i react-native-dropdown-picker
 
 firebase
 - npm install firebase@9.6.11
