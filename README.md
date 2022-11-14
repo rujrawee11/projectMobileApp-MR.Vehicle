@@ -9,6 +9,7 @@ react native paper
 datepicker
 - yarn add react-datepicker
 - npm i react-native-modal-datetime-picker @react-native-community/datetimepicker
+- yarn add react-native-modal-datetime-picker @react-native-community/datetimepicker
 
 checkbox
 - yarn add @react-native-community/checkbox
@@ -22,6 +23,7 @@ navigate
 dropdown
 - yarn add react-dropdown
 - npm i react-native-dropdown-picker
+
 
 firebase
 - npm install firebase@9.6.11
