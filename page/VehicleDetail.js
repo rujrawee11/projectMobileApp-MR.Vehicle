@@ -1,15 +1,72 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, TextInput, View, SafeAreaView, Image, FlatList, TouchableOpacity, ScrollView, Modal} from 'react-native';
+import {StyleSheet, Text, View, SafeAreaView, Image, TouchableOpacity, Modal, Alert} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import 'react-native-gesture-handler';
+import { collection, doc, setDoc, addDoc, deleteDoc, updateDoc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { db } from '../dataBase/firebaseDB';
 
 const VehicleDetail = (props) => {
-    const [protectText, setProtectText] = useState("ผู้ให้เช่ายานพาหนะเงินมัดจำในบัตรเครดิตของคุณ คุณอาจสูญเสียเงินมัดจำทั้งหมดหากรถเสียหายหรือถูกขโมย แต่ตราบใดที่คุณมีการคุ้มครองเต็มรูปแบบของเรา ทางผู้ให้เช่ายานพาหนะจะคืนเงินให้คุณ")
-    const [redProtectText, setRedProtectText] = useState("(ราคารวมภาษีและค่าธรรมเนียมที่เกี่ยวข้องทั้งหมดแล้ว)")
-    const ruleDetail1 = useState("หากรถที่เช่าเกิดการถูกโจรกรรม ประกัน “ความคุ้มครองเต็มรูปแบบ” จะทำให้ผู้เช่าไม่มี---")
+    const protectText = useState("ผู้ให้เช่ายานพาหนะเงินมัดจำในบัตรเครดิตของคุณ คุณอาจสูญเสียเงินมัดจำทั้งหมดหากรถเสียหายหรือถูกขโมย แต่ตราบใดที่คุณมีการคุ้มครองเต็มรูปแบบของเรา ทางผู้ให้เช่าจะคืนเงินให้คุณ")
+    const redProtectText = useState("(ราคารวมภาษีและค่าธรรมเนียมที่เกี่ยวข้องทั้งหมดแล้ว)")
+    const ruleDetail1 = useState("หากรถที่เช่าเกิดการถูกโจรกรรม ประกัน “ความคุ้มครองเต็มรูปแบบ” จะทำให้ผู้เช่าไม่เสียเงินมัดจำทั้งหมดแต่ยังต้องมีการตรวจสอบถึงสาเหตุการสูญหายเพื่อคำนวณเงินสำหรับค่าชดเชย")
     const ruleDetail2 = useState("ผลิตภัณฑ์ความคุ้มครองมักจะมีข้อยกเว้นต่าง ๆ แต่ประกัน “ความคุ้มครองเต็มรูปแบบ” นั้นครอบคลุมภายนอกและชิ้นส่วนเครื่องยนต์ของรถทุกชิ้น ตั้งแต่ยางรถและหน้าต่างรถ ไปจนถึงเครื่องยนต์ หลังคา และช่วงล่าง")
     const ruleDetail3 = useState("หากรถไม่สามารถใช้การได้ กุญแจสูญหาย หรือลืมกุญแจไว้ในรถ ประกัน “ความคุ้มครองเต็มรูปแบบ” จะคืนเงินให้กรณีที่มีค่าเรียกช่างมาให้บริการ ค่าลากรถ และค่าทำกุญแจใหม่")
 
+    // Alert
+    const createTwoButtonAlert = () => {
+        Alert.alert(
+            "สถานะการจอง",
+            "การจองรถของท่านสำเร็จ",
+            [
+              {
+                  text: "OK", 
+                  onPress: () => logCheck()
+              }
+            ]
+        );
+    }
+    //ต้องใส่มั้ย?
+    const logCheck = () => {
+        if( reservePremium == true) {
+            console.log("OK Pressed For Premium")
+        } else {
+            console.log("OK Pressed For Free")
+        }
+    }
+
+    // ตัวแปรสำหรับส่วนที่ 2
+    const [forLoadData, setForLoadData] = useState(false)
+    const [vBrand, setVBrand] = useState()
+    const [vSeats, setVSeats] = useState()
+    const [vOS, setVOS] = useState()
+    const [vPeriodUsed, setVPeriodUsed] = useState()
+    {/** Id ที่จะมากับ Nevigator เพื่อเป็นตัวเรียกข้อมูลมาให้ถูกต้อง*/}
+    const [vId, setVId] = useState("LEu8CFPqFrKxfDx5puqa")
+
+    // ฟังก์ชันโหลดข้อมูล
+    const loadData = () => {
+        getDoc(doc(db, "vehicleDetails", vId))
+            .then(docData => {
+                if (docData.exists()) {
+                    // console.log(docData.data());
+                    setVBrand(docData.data().brand);
+                    setVSeats(docData.data().seats);
+                    setVOS(docData.data().os);
+                    setVPeriodUsed(docData.data().periodUsed);
+                }
+            }).catch((error) => {
+                // The write failed...
+                alert(error);
+            });
+    }
+    // กำหนดให้เพิ่มข้อมูลก่อน render
+    // ต้องกำหนดค่า vId ที่ส่งมาจากหน้าก่อนด้วย
+    if (forLoadData == false) {
+        //setVId(ไอดีจากหน้าก่อน)
+        loadData()
+        setForLoadData(true)
+    }
+
+    // ชื่อ Logo
     const [logoName1, setLogoName1] = useState("down")
     const [logoName2, setLogoName2] = useState("down")
     const [logoName3, setLogoName3] = useState("down")
@@ -68,6 +125,7 @@ const VehicleDetail = (props) => {
         }
     }
 
+    // ตั้งค่า DropText
     const [shouldShowRule1, setShouldShowRule1] = useState(true)
     const [shouldShowRule2, setShouldShowRule2] = useState(true)
     const [shouldShowRule3, setShouldShowRule3] = useState(true)
@@ -78,6 +136,17 @@ const VehicleDetail = (props) => {
 
     {/**โซน Pop up การจอง */}
     const [reserveVisible, setReserveVisible] = useState(false)
+    {/**ตัวส่งค่าว่าจองแบบ พรีเมียมไหม */}
+    const [reservePremium, setReservePremium] = useState()
+    const setPurchaseStatus = ( status ) => {
+        if( status == true) {
+            setReservePremium(true)
+        }else if (status == false) {
+            setReservePremium(false)
+        }
+        setReserveVisible(false)
+        createTwoButtonAlert()
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -87,7 +156,54 @@ const VehicleDetail = (props) => {
                 <SafeAreaView style={{flex: 1, backgroundColor: '#000000aa'}}>
                     <SafeAreaView style={styles.outBorder}>
                         <SafeAreaView style={{flex: 1, margin: 10}}>
-                            <Text></Text>
+                            <View style={{flex: 0.5, alignItems: 'flex-end', justifyContent: 'center'}}>
+                                <AntDesign onPress={()=>setReserveVisible(false)} name="close" size={30} color="black" />
+                            </View>
+                            <View style={{flex: 4,justifyContent: 'space-evenly'}}>
+                                <Text style={{fontSize: 22, fontWeight: 'bold', alignSelf: 'center'}}>ทำประกันเพื่อรับสิทธิพิเศษ</Text>
+                                <View style={{flexDirection: 'row'}}>
+                                    <View style={{flex: 2}}></View>
+                                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly'}}>
+                                        <Text style={{fontSize: 18, fontWeight: '500'}}>ฟรี</Text>
+                                        <Text style={{fontSize: 18, fontWeight: '500'}}>พรีเมียม</Text>
+                                    </View>
+                                </View>
+                                <View style={{flexDirection: 'row'}}>
+                                    <View style={{flex: 2}}>
+                                        <Text style={{fontSize: 18, fontWeight: 'bold'}}>1. ยานพาหนะถูกโจรกรรม</Text>
+                                    </View>
+                                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
+                                        <AntDesign name="close" size={30} color="grey" />
+                                        <AntDesign name="check" size={30} color="green"/>
+                                    </View>
+                                </View>
+                                <View style={{flexDirection: 'row'}}>
+                                    <View style={{flex: 2}}>
+                                        <Text style={{fontSize: 18, fontWeight: 'bold'}}>2. ครอบคลุมภายนอก</Text>
+                                    </View>
+                                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
+                                        <AntDesign name="close" size={30} color="grey" />
+                                        <AntDesign name="check" size={30} color="green"/>
+                                    </View>
+                                </View>
+                                <View style={{flexDirection: 'row'}}>
+                                    <View style={{flex: 2}}>
+                                        <Text style={{fontSize: 18, fontWeight: 'bold'}}>3. ยานพาหนะขัดข้อง</Text>
+                                    </View>
+                                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
+                                        <AntDesign name="close" size={30} color="grey"/>
+                                        <AntDesign name="check" size={30} color="green"/>
+                                    </View>
+                                </View>
+                            </View>
+                            <View style={{flex: 1,flexDirection: 'row', justifyContent: 'space-around'}}>
+                            <TouchableOpacity onPress={()=>setPurchaseStatus(false)} style={[styles.touchableOpacity, {backgroundColor: '#fff', borderWidth: 1}]}>
+                                <Text style={{fontSize: 24, fontWeight: 'bold'}}>ฟรี</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={()=>setPurchaseStatus(true)} style={[styles.touchableOpacity, {backgroundColor: '#33DB18'}]}>
+                                <Text style={{fontSize: 24, fontWeight: 'bold', color: '#fff'}}>พรีเมียม</Text>
+                            </TouchableOpacity>
+                            </View>
                         </SafeAreaView>
                     </SafeAreaView>
                 </SafeAreaView>
@@ -109,14 +225,14 @@ const VehicleDetail = (props) => {
                         </SafeAreaView>
                         <SafeAreaView style={{flex: 1, width: '100%'}}>
                             <View style={{flex: 1, margin: '5%', alignItems: 'center', justifyContent: 'space-between'}}>
-                                <Text style={styles.bigText}>TOYOTA</Text>
-                                <Text style={styles.text}><AntDesign name="caretright" size={16} color="black"/> 4 Seats</Text>
-                                <Text style={styles.text}><AntDesign name="caretright" size={16} color="black"/> Auto</Text>
-                                <Text style={styles.text}><AntDesign name="caretright" size={16} color="black"/> 750 Km perrental</Text>
+                                <Text style={styles.bigText}>{vBrand}</Text>
+                                <Text style={styles.text}><AntDesign name="caretright" size={16} color="black"/> {vSeats} seats</Text>
+                                <Text style={styles.text}><AntDesign name="caretright" size={16} color="black"/> {vOS}</Text>
+                                <Text style={styles.text}><AntDesign name="caretright" size={16} color="black"/> {vPeriodUsed} Km perrental</Text>
                             </View>
                         </SafeAreaView>
                     </SafeAreaView>
-                    <SafeAreaView style={{flex: 1.5, alignItems: 'flex-end', justifyContent: 'center'}}>
+                    <SafeAreaView style={{flex: 1, alignItems: 'flex-end', justifyContent: 'center'}}>
                         <TouchableOpacity style={[styles.touchableOpacity, {marginRight: '2%', backgroundColor: '#EB3F38', flexDirection: 'row'}]}>
                             <Text style={{fontSize: 18, fontWeight: '500', color: '#fff'}}>More Info</Text>
                             <AntDesign name="caretright" size={18} color="#fff" style={{marginLeft: '2%', marginRight: '2%'}}/>
@@ -139,14 +255,14 @@ const VehicleDetail = (props) => {
                         </View>
                         <Text style={{fontSize: 16, color: 'red'}}>{redProtectText}</Text>
                     </SafeAreaView>
-                    
-                    <SafeAreaView style={{flex: 2, backgroundColor: 'white', margin: 10, justifyContent: 'space-evenly'}}>
-                        <Text style={styles.headerText}>สิ่งที่คุ้มครอง</Text>  
+                    <SafeAreaView style={{flex: 2, margin: 10, justifyContent: 'space-around'}}>
+                        <Text style={styles.headerText}>สิ่งที่คุ้มครอง</Text>
                             {shouldShowRule1 ? (
                                 <View style={styles.textBoxLayout}>
                                     <Text style={[styles.text, {fontWeight: '400'}]}>1. ยานพาหนะถูกโจรกรรม <AntDesign name={logoName1} size={15} color="black" onPress={()=>dropText(1)} /></Text>
                                 </View>
                             ): null}
+
                             {shouldShowRule1Detail ? (
                                 <View style={styles.textBoxLayout}>
                                     <Text style={[styles.litleText]}>{ruleDetail1}</Text>
@@ -180,7 +296,7 @@ const VehicleDetail = (props) => {
             
             {/** ส่วน 5 ปุ่มจอง */}
             <SafeAreaView style={[styles.headerTextZone ,{flex: 1, alignItems: 'center', justifyContent: 'center'}]}>
-                <TouchableOpacity style={[styles.touchableOpacity, {backgroundColor: '#FDB23F'}]}>
+                <TouchableOpacity onPress={()=>setReserveVisible(true)} style={[styles.touchableOpacity, {backgroundColor: '#FDB23F'}]}>
                     <Text style={{fontSize: 24, fontWeight: 'bold'}}>จอง</Text>
                 </TouchableOpacity>
             </SafeAreaView>
@@ -233,7 +349,9 @@ const styles = StyleSheet.create({
         flex: 1, 
         backgroundColor: '#fff',
         padding: 20, 
-        margin: 30, 
+        margin: '10%',
+        marginTop: '+60%',
+        marginBottom: '+60%',
         borderRadius: 10,
         borderWidth: 2,
         borderColor: '0000'
