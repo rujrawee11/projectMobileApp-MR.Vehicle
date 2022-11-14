@@ -3,11 +3,12 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import RentalLookPage from './page/VehicleStatus'
 import RenterLookPage from './page/VehicleSelect'
+import DetailPage from './page/VehicleDetail'
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <RenterLookPage/>
+      <DetailPage/>
     </View>
   );
 }

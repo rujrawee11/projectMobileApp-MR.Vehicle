@@ -14,7 +14,7 @@ const SelectVehicleDetails = (probs) => {
 
     {/***/}
     return (
-        <SafeAreaView style={{flex: 1, backgroundColor: '#DADBFB', width: '100%', flexWrap: 'wrap', marginTop: '2%'}}>
+        <SafeAreaView style={{flex: 1, backgroundColor: '#DADBFB',borderRadius: 10, width: '100%', flexWrap: 'wrap', marginTop: '2%'}}>
                      
             <SafeAreaView style={[styles.boxLayout, {flexDirection: 'row'}]}>
                 <SafeAreaView style={styles.viewVehicleImage}>
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     vehicleImage: {
         width: 180,
         height: 120,
-        // borderRadius: 15,
+        borderRadius: 15,
     },
     boxLayout: {
         flex: 1,
@@ -78,25 +78,25 @@ const styles = StyleSheet.create({
     touchableOpacity: {
         padding: 10,
         backgroundColor: '#FFD051',
-        // borderRadius: 10,
+        borderRadius: 10,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center'
     },
     viewBoxUn : {
-        // borderRadius: 10,
+        borderRadius: 10,
     },
     viewBoxAva: {
         padding: 5, 
         backgroundColor: '#ADFFBA', 
-        // borderRadius: 10,
+        borderRadius: 10,
     },
     viewVehicleImage: {
         flex: 1,
         width: '100%',
         backgroundColor:'#D5FAF4',
         alignItems: 'center',
-        // borderRadius: 10
+        borderRadius: 10
     }
 })
 

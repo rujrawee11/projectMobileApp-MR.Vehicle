@@ -4,7 +4,7 @@ import { AntDesign } from '@expo/vector-icons';
 import Checkbox from 'expo-checkbox';
 
 const Filter = (props) => {
-    const [filterVisible, setFilterVisible] = useState(true)
+    const [filterVisible, setFilterVisible] = useState(false)
     
     {/**โซนของค่า CheckBox*/}
     const [checkBoxCar, setCheckBoxCar] = useState(false);
