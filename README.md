@@ -38,3 +38,12 @@ firebase
   appId: "1:251539828458:web:9b7dc1bcf1b1608945f193"
 };
 
+"ของสุน"
+- expo install expo-checkbox
+- expo install react-native-paper
+•	expo install @react-navigation/native
+•	expo install react-native-screens react-native-safe-area-context
+•	expo install @react-navigation/native-stack
+•	expo install @react-navigation/bottom-tabs
+•	expo install @react-navigation/drawer
+•	expo install react-native-gesture-handler react-native-reanimated
