@@ -1,6 +1,4 @@
-# projectMobile
-
-ต้องลง
+# ProjectMobileApp
 
 react native paper
 - yarn add react-native-paper@5.0.0-rc.8
@@ -38,7 +36,6 @@ firebase
   appId: "1:251539828458:web:9b7dc1bcf1b1608945f193"
 };
 
-"ของสุน"
 - expo install expo-checkbox
 - expo install react-native-paper
 -	expo install @react-navigation/native
